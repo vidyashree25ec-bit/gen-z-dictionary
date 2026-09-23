@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gen Z Slang Dictionary | College Web Project</title>
+  <meta name="description" content="A modern, interactive dictionary for decoding Gen Z slang, viral terms, meanings, and cultural context. Complete with real-time search, audio pronunciation, and slang quiz.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo" onclick="switchTab('dictionary'); return false;">
+        <span>🔥</span>
+        <span>Gen Z <span class="gradient-text">Dictionary</span></span>
+        <span class="logo-badge">College Project</span>
+      </a>
+
+      <div class="nav-actions">
+        <button id="open-add-modal-btn" class="nav-btn primary" title="Contribute a new slang word">
+          <span>+</span>
+          <span>Add Slang</span>
+        </button>
+        <button id="random-slang-nav-btn" class="nav-btn" title="Discover a Random Slang" aria-label="Random Slang">
+          <span>🎲</span>
+          <span>Random</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('notifications'); return false;" title="Notification Center" aria-label="Notifications">
+          <span>🔔</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('profile'); return false;" title="My Profile" aria-label="User Profile">
+          <span>👤</span>
+        </button>
+        <button class="nav-btn" onclick="switchTab('settings'); return false;" title="App Settings" aria-label="Settings">
+          <span>⚙️</span>
+        </button>
+        <button id="theme-toggle-btn" class="nav-btn theme-toggle-btn" aria-label="Toggle theme" title="Toggle Light / Dark Mode">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-text">Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-pill">
+        <span>⚡</span> The Ultimate Lingo Guide for Normal Humans (7,500+ Slang Terms)
+      </div>
+      <h1 class="hero-title">
+        Decode the <span class="gradient-text">Gen Z Dialect</span>
+      </h1>
+      <p class="hero-subtitle">
+        Explore 7,500+ modern slang terms, realistic examples, phonetic pronunciations, and origins. Never feel out of the loop again, no cap.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="search-wrapper">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Search 7,500+ slang words, meanings, acronyms & tags (e.g. rizz, no cap, skibidi, lock in)..." 
+            autocomplete="off"
+            aria-label="Search slang words"
+          >
+          <button id="voice-search-btn" class="voice-search-btn" title="Voice Search (Speak a slang word)" aria-label="Voice Search">
+            🎙️
+          </button>
+          <button id="clear-search-btn" class="clear-search-btn" title="Clear search" aria-label="Clear search">✕</button>
+          <span class="search-shortcut-badge">Press /</span>
+        </div>
+        <!-- Search Autocomplete Suggestions Dropdown -->
+        <div id="search-suggestions-dropdown" class="search-suggestions-dropdown hidden" role="listbox" aria-label="Search suggestions"></div>
+      </div>
+
+      <!-- Categories Section (Directly Below Search Bar) -->
+      <div class="categories-section">
+        <div class="categories-header-label">
+          <span class="category-icon-sparkle">📂</span>
+          <span>Explore by Category:</span>
+        </div>
+        <div id="category-chips" class="category-chips">
+          <!-- Dynamic Category buttons: Slang Basics, Social Media, Reactions, School & Life -->
+        </div>
+      </div>
+
+      <!-- Regions Filter Section -->
+      <div class="regions-section">
+        <div class="regions-header-label">
+          <span class="region-icon-globe">🌍</span>
+          <span>Slang Origin / Region:</span>
+        </div>
+        <div id="region-chips" class="region-chips">
+          <!-- Dynamic Region buttons: All, Global, USA, UK, India, Internet/Online -->
+        </div>
+      </div>
+
+      <!-- Quick Trending Tags -->
+      <div class="trending-tags">
+        <span class="trending-label">🔥 Trending:</span>
+        <button type="button" class="trend-tag" data-tag="rizz">#rizz</button>
+        <button type="button" class="trend-tag" data-tag="delulu">#delulu</button>
+        <button type="button" class="trend-tag" data-tag="ate">#ate</button>
+        <button type="button" class="trend-tag" data-tag="skibidi">#skibidi</button>
+        <button type="button" class="trend-tag" data-tag="fanum-tax">#fanum-tax</button>
+        <button type="button" class="trend-tag" data-tag="cooked">#cooked</button>
+      </div>
+    </section>
+
+    <!-- Word of the Day Section -->
+    <section class="spotlight-section">
+      <div id="spotlight-card" class="spotlight-card">
+        <div class="spotlight-content">
+          <div class="spotlight-header-row">
+            <span id="spotlight-badge" class="spotlight-badge">💡 Word of the Day</span>
+            <span id="spotlight-category" class="card-category-badge badge-basics">Slang Basics</span>
+          </div>
+          <div class="spotlight-word-wrap">
+            <h2 id="spotlight-word" class="spotlight-word">Rizz</h2>
+            <span id="spotlight-pronunciation" class="spotlight-pronunciation">/rɪz/</span>
+          </div>
+          <p id="spotlight-meaning" class="spotlight-meaning">
+            Charisma or charm, specifically when flirting or trying to attract a romantic interest.
+          </p>
+          <div id="spotlight-example" class="spotlight-example">
+            “Bro walked up to her, made her laugh in 5 seconds, and got her number. Pure unspoken rizz.”
+          </div>
+        </div>
+        <div class="spotlight-actions">
+          <button id="spotlight-audio-btn" class="btn-icon-text" title="Listen to pronunciation">
+            <span>🔊</span> Pronounce
+          </button>
+          <button id="spotlight-copy-btn" class="btn-icon-text" title="Copy Word of the Day details">
+            <span>📋</span> Copy
+          </button>
+          <button id="spotlight-shuffle-btn" class="btn-icon-text" title="Surprise Me with another random slang">
+            <span>🎲</span> Randomize
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Statistics Dashboard -->
+    <section class="stats-dashboard-section" aria-label="Website Statistics">
+      <div class="stats-dashboard">
+        <div class="stat-card">
+          <span class="stat-icon">📚</span>
+          <div class="stat-info">
+            <span id="stat-total-terms" class="stat-value">61</span>
+            <span class="stat-label">Total Slang Terms</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📂</span>
+          <div class="stat-info">
+            <span id="stat-total-categories" class="stat-value">4</span>
+            <span class="stat-label">Categories</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">⭐</span>
+          <div class="stat-info">
+            <span id="stat-total-bookmarks" class="stat-value">0</span>
+            <span class="stat-label">Bookmarked Terms</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🕐</span>
+          <div class="stat-info">
+            <span id="stat-recent-count" class="stat-value">0</span>
+            <span class="stat-label">Recently Viewed</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recently Viewed Section -->
+    <section id="recently-viewed-section" class="recently-viewed-section">
+      <div class="recently-viewed-header">
+        <div class="recently-viewed-title-wrap">
+          <span class="recent-icon">🕐</span>
+          <h3 class="recently-viewed-title">Recently Viewed</h3>
+          <span id="recent-counter-badge" class="recent-counter-badge">0 words</span>
+        </div>
+        <button id="clear-recent-btn" class="clear-recent-btn" title="Clear recently viewed history">
+          Clear History
+        </button>
+      </div>
+      <div id="recently-viewed-list" class="recently-viewed-list">
+        <!-- Dynamically rendered 5 recent words -->
+      </div>
+    </section>
+
+    <!-- Controls, Navigation Tabs, and Sorting -->
+    <section class="controls-bar">
+      <!-- Navigation Tabs (Dictionary, Sentence Explainer, Translator, Quiz, Trending, Favorites, Profile, Notifications, Settings) -->
+      <div class="view-tabs">
+        <button class="view-tab active" data-tab="dictionary">
+          <span>📖</span> Dictionary
+        </button>
+        <button class="view-tab" data-tab="sentence-explainer">
+          <span>🧩</span> Sentence Explainer
+        </button>
+        <button class="view-tab" data-tab="translator">
+          <span>🔄</span> Translator
+        </button>
+        <button class="view-tab" data-tab="quiz">
+          <span>🧠</span> Slang Quiz
+        </button>
+        <button class="view-tab" data-tab="trending">
+          <span>📈</span> Trending
+        </button>
+        <button class="view-tab" data-tab="favorites">
+          <span>⭐</span> Bookmarks (<span id="fav-tab-count">0</span>)
+        </button>
+        <button class="view-tab" data-tab="profile">
+          <span>👤</span> Profile
+        </button>
+        <button class="view-tab" data-tab="notifications">
+          <span>🔔</span> Notifications (<span id="notif-tab-count">0</span>)
+        </button>
+        <button class="view-tab" data-tab="settings">
+          <span>⚙️</span> Settings
+        </button>
+      </div>
+
+      <!-- Filters and Sorting Options (Active on Dictionary & Favorites) -->
+      <div id="filter-controls" class="filter-sort-row">
+        <div class="active-category-status">
+          <span id="active-category-indicator" class="active-cat-pill">📂 Showing: All Slang</span>
+        </div>
+
+        <div class="sort-select-wrapper">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" class="sort-select">
+            <option value="popularity">Most Popular 🔥</option>
+            <option value="recent">Newest Additions 🆕</option>
+            <option value="alpha-asc">Alphabetical (A - Z)</option>
+            <option value="alpha-desc">Alphabetical (Z - A)</option>
+            <option value="random">Shuffle 🎲</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dictionary View -->
+    <div id="dictionary-view">
+      <div class="stats-bar">
+        <span id="stats-counter">Loading dictionary...</span>
+      </div>
+
+      <!-- Slang Cards Grid Container -->
+      <div id="slang-grid" class="slang-grid">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Sentence Explainer View -->
+    <section id="sentence-explainer-view" class="tool-view-section" style="display: none;">
+      <div class="tool-card">
+        <div class="tool-header">
+          <span class="tool-icon-large">🧩</span>
+          <div>
+            <h2 class="tool-title">AI-Style Gen Z Sentence Explainer</h2>
+            <p class="tool-subtitle">Paste any full slang sentence, tweet, or message to decode all slang terms, emojis, emotional tone, and get a Plain-English translation.</p>
+          </div>
+        </div>
+
+        <div class="tool-input-wrap">
+          <label class="form-label" for="sentence-input">Enter a complete Gen Z sentence or phrase:</label>
+          <textarea id="sentence-input" class="tool-textarea" placeholder="e.g. Bro has insane rizz, no cap 💀 and she ate with that outfit fr..." rows="3"></textarea>
+          
+          <div class="tool-action-row">
+            <button id="analyze-sentence-btn" class="nav-btn primary">
+              <span>✨</span> Decode & Explain Sentence
+            </button>
+            <button id="sentence-sample-btn" class="nav-btn">
+              <span>🎲</span> Try Sample Sentence
+            </button>
+            <button id="sentence-clear-btn" class="nav-btn">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Analysis Output Container -->
+        <div id="sentence-result-container" class="sentence-result-container" style="display: none;">
+          <div class="analysis-meta-bar">
+            <span class="analysis-meta-title">📊 Analysis Overview</span>
+            <span id="sentence-tone-badge" class="sentence-tone-badge">🎭 Playful & High-Energy</span>
+          </div>
+
+          <div class="translation-result-box">
+            <h4 class="trans-box-title">📝 Plain English Interpretation:</h4>
+            <div id="sentence-english-translation" class="sentence-english-translation">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <div class="detected-slang-section">
+            <h4 class="detected-section-title">🔍 Identified Slang Words & Reactions (<span id="detected-count">0</span> found):</h4>
+            <div id="detected-terms-grid" class="detected-terms-grid">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slang Translator View -->
+    <section id="translator-view" class="tool-view-section" style="display: none;">
+      <div class="tool-card">
+        <div class="tool-header">
+          <span class="tool-icon-large">🔄</span>
+          <div>
+            <h2 class="tool-title">Dual-Mode Slang Translator</h2>
+            <p class="tool-subtitle">Translate text effortlessly between Standard English and Viral Gen Z Slang in both directions.</p>
+          </div>
+        </div>
+
+        <div class="translator-controls-bar">
+          <div class="translator-mode-indicators">
+            <span id="trans-source-pill" class="trans-mode-pill active">Standard English</span>
+            <button id="swap-trans-mode-btn" class="swap-trans-btn" title="Swap Translation Direction">
+              <span>⇄</span> Swap Direction
+            </button>
+            <span id="trans-target-pill" class="trans-mode-pill">Gen Z Slang</span>
+          </div>
+        </div>
+
+        <div class="translator-grid">
+          <!-- Source Input Panel -->
+          <div class="trans-panel source-panel">
+            <div class="trans-panel-header">
+              <label id="trans-source-label" class="trans-panel-label" for="trans-source-input">Standard English Input:</label>
+              <button id="clear-trans-btn" class="trans-mini-btn" title="Clear input">Clear</button>
+            </div>
+            <textarea id="trans-source-input" class="trans-textarea" placeholder="Type or paste text here to translate..."></textarea>
+            <div class="trans-panel-footer">
+              <button id="translate-action-btn" class="nav-btn primary">
+                Translate ➔
+              </button>
+            </div>
+          </div>
+
+          <!-- Target Output Panel -->
+          <div class="trans-panel target-panel">
+            <div class="trans-panel-header">
+              <label id="trans-target-label" class="trans-panel-label">Gen Z Slang Translation:</label>
+              <span id="trans-status-badge" class="trans-status-badge">Ready</span>
+            </div>
+            <div id="trans-target-output" class="trans-output-box">
+              <span class="trans-placeholder">Translation will appear here instantly...</span>
+            </div>
+            <div class="trans-panel-footer">
+              <button id="copy-trans-btn" class="nav-btn" title="Copy translated text">
+                <span>📋</span> Copy
+              </button>
+              <button id="speak-trans-btn" class="nav-btn" title="Pronounce translated text">
+                <span>🔊</span> Listen
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Preset Samples -->
+        <div class="trans-presets-wrap">
+          <span class="trans-presets-title">💡 Quick Preset Examples:</span>
+          <div class="trans-presets-list">
+            <button class="trans-preset-chip" data-mode="to_genz" data-text="I am telling the truth, that movie was mediocre and disappointing.">"I am telling the truth..."</button>
+            <button class="trans-preset-chip" data-mode="to_genz" data-text="She did an exceptional job and looked stunning on the red carpet.">"She did an exceptional job..."</button>
+            <button class="trans-preset-chip" data-mode="to_genz" data-text="We did not study at all and now we are in deep trouble.">"We are in deep trouble..."</button>
+            <button class="trans-preset-chip" data-mode="to_genz" data-text="He is very charming and has great style.">"He is very charming..."</button>
+            <button class="trans-preset-chip" data-mode="to_english" data-text="Bro was capping so hard, honestly he is so cooked 💀">"Bro was capping so hard..."</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Slang Dashboard View -->
+    <section id="trending-view" class="tool-view-section" style="display: none;">
+      <div class="tool-card">
+        <div class="tool-header">
+          <span class="tool-icon-large">📈</span>
+          <div>
+            <h2 class="tool-title">Trending Slang & Live Analytics</h2>
+            <p class="tool-subtitle">Real-time database analytics tracking most searched terms, view counts, and community ratings.</p>
+          </div>
+        </div>
+
+        <div class="trending-dashboard-grid">
+          <!-- Leaderboard 1: Most Searched -->
+          <div class="trending-board-card">
+            <div class="board-header">
+              <span class="board-icon">🔥</span>
+              <h3 class="board-title">Top 5 Most Searched</h3>
+            </div>
+            <div id="board-searched-list" class="board-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Leaderboard 2: Most Viewed -->
+          <div class="trending-board-card">
+            <div class="board-header">
+              <span class="board-icon">👀</span>
+              <h3 class="board-title">Top 5 Most Viewed</h3>
+            </div>
+            <div id="board-viewed-list" class="board-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Leaderboard 3: Community Top Rated -->
+          <div class="trending-board-card">
+            <div class="board-header">
+              <span class="board-icon">👍</span>
+              <h3 class="board-title">Highest Community Rated</h3>
+            </div>
+            <div id="board-voted-list" class="board-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Leaderboard 4: Recently Added -->
+          <div class="trending-board-card">
+            <div class="board-header">
+              <span class="board-icon">🆕</span>
+              <h3 class="board-title">Recently Added Slang</h3>
+            </div>
+            <div id="board-recent-list" class="board-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Profile View -->
+    <section id="profile-view" class="profile-section" style="display: none;">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-avatar-wrap">
+            <span id="profile-avatar" class="profile-avatar">😎</span>
+            <button id="quick-avatar-btn" class="quick-avatar-btn" title="Change Avatar Emoji">✏️</button>
+          </div>
+          <div class="profile-meta">
+            <div class="profile-name-row">
+              <h2 id="profile-name" class="profile-name">Slang Explorer</h2>
+              <span id="profile-rank-badge" class="profile-rank-badge">Level 3 • Vibe Master</span>
+            </div>
+            <p id="profile-handle" class="profile-handle">@lingo_scholar</p>
+            <p id="profile-bio" class="profile-bio">Decoding internet culture, slang, and memes daily. No cap.</p>
+            <span id="profile-joined" class="profile-joined">🗓️ Joined: August 2026</span>
+          </div>
+          <button id="open-edit-profile-btn" class="nav-btn primary edit-profile-btn">
+            <span>✏️</span> Edit Profile
+          </button>
+        </div>
+
+        <!-- Profile Quick Stats Dashboard -->
+        <div class="profile-stats-grid">
+          <div class="profile-stat-box">
+            <span class="pstat-icon">⭐</span>
+            <span id="pstat-bookmarks" class="pstat-val">0</span>
+            <span class="pstat-lbl">Bookmarked Slangs</span>
+          </div>
+          <div class="profile-stat-box">
+            <span class="pstat-icon">➕</span>
+            <span id="pstat-contributions" class="pstat-val">0</span>
+            <span class="pstat-lbl">My Contributions</span>
+          </div>
+          <div class="profile-stat-box">
+            <span class="pstat-icon">🏆</span>
+            <span id="pstat-quiz-score" class="pstat-val">0/8</span>
+            <span class="pstat-lbl">Quiz Best Score</span>
+          </div>
+          <div class="profile-stat-box">
+            <span class="pstat-icon">🕐</span>
+            <span id="pstat-recent" class="pstat-val">0</span>
+            <span class="pstat-lbl">Recently Viewed</span>
+          </div>
+        </div>
+
+        <!-- Profile Tabs (My Bookmarks vs My Contributions) -->
+        <div class="profile-content-tabs">
+          <button id="ptab-bookmarks-btn" class="ptab-btn active">⭐ My Bookmarks (<span id="profile-fav-count">0</span>)</button>
+          <button id="ptab-contrib-btn" class="ptab-btn">➕ My Contributed Slang (<span id="profile-contrib-count">0</span>)</button>
+        </div>
+
+        <div id="profile-cards-container" class="slang-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Notifications View -->
+    <section id="notifications-view" class="notifications-section" style="display: none;">
+      <div class="notifications-card">
+        <div class="notifications-header">
+          <div class="notif-title-wrap">
+            <span class="notif-icon-large">🔔</span>
+            <div>
+              <h2 class="notifications-title">Notification Center</h2>
+              <p class="notifications-subtitle">Stay updated on daily slang, quizzes, and your contributions.</p>
+            </div>
+          </div>
+          <div class="notif-actions">
+            <button id="mark-all-read-btn" class="nav-btn" title="Mark all as read">
+              ✓ Mark All Read
+            </button>
+            <button id="clear-all-notifs-btn" class="nav-btn" title="Clear notification history">
+              🗑️ Clear All
+            </button>
+          </div>
+        </div>
+
+        <div id="notifications-list" class="notifications-list">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings View -->
+    <section id="settings-view" class="settings-section" style="display: none;">
+      <div class="settings-card">
+        <div class="settings-header">
+          <span class="settings-icon-large">⚙️</span>
+          <div>
+            <h2 class="settings-title">App Settings & Preferences</h2>
+            <p class="settings-subtitle">Customize your theme, pronunciation voice, notifications, and data backups.</p>
+          </div>
+        </div>
+
+        <!-- Settings Groups -->
+        <div class="settings-groups">
+          
+          <!-- Appearance -->
+          <div class="setting-group">
+            <h3 class="setting-group-title">🎨 Appearance & Theme</h3>
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Theme Mode</span>
+                <span class="setting-desc">Select comfortable Dark theme or clean Light theme.</span>
+              </div>
+              <div class="setting-control">
+                <select id="settings-theme-select" class="form-select">
+                  <option value="dark">🌙 Dark Mode (Default)</option>
+                  <option value="light">☀️ Light Mode</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Audio & Speech Synthesis -->
+          <div class="setting-group">
+            <h3 class="setting-group-title">🔊 Text-to-Speech Pronunciation</h3>
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Speech Rate / Speed</span>
+                <span class="setting-desc">Adjust how fast slang words are pronounced aloud (<span id="rate-val-display">0.9x</span>).</span>
+              </div>
+              <div class="setting-control">
+                <input type="range" id="settings-speech-rate" min="0.6" max="1.4" step="0.1" value="0.9" class="slider-input">
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Voice Pitch</span>
+                <span class="setting-desc">Adjust the pitch tone of speech synthesis (<span id="pitch-val-display">1.0</span>).</span>
+              </div>
+              <div class="setting-control">
+                <input type="range" id="settings-speech-pitch" min="0.8" max="1.3" step="0.1" value="1.0" class="slider-input">
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Voice Selector</span>
+                <span class="setting-desc">Choose from your browser's installed English voices.</span>
+              </div>
+              <div class="setting-control">
+                <select id="settings-voice-select" class="form-select">
+                  <option value="">Default System Voice</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Audio Preview</span>
+                <span class="setting-desc">Test your current speech synthesis configuration.</span>
+              </div>
+              <div class="setting-control">
+                <button type="button" id="test-voice-btn" class="nav-btn primary">
+                  🔊 Test Pronunciation
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notifications & Alerts -->
+          <div class="setting-group">
+            <h3 class="setting-group-title">🔔 Alerts & Feedback</h3>
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">In-App Toast Alerts</span>
+                <span class="setting-desc">Show quick popup notifications when copying, favoriting, or filtering.</span>
+              </div>
+              <div class="setting-control">
+                <label class="switch">
+                  <input type="checkbox" id="settings-toast-toggle" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Daily Word of the Day Notifications</span>
+                <span class="setting-desc">Log a new notification each day when the Word of the Day changes.</span>
+              </div>
+              <div class="setting-control">
+                <label class="switch">
+                  <input type="checkbox" id="settings-daily-notif-toggle" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Backup, Export & Reset -->
+          <div class="setting-group">
+            <h3 class="setting-group-title">💾 Data Backup & Management</h3>
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Export Application Data</span>
+                <span class="setting-desc">Download a JSON backup of your bookmarks, custom slang, profile, and quiz history.</span>
+              </div>
+              <div class="setting-control">
+                <button type="button" id="export-data-btn" class="nav-btn">
+                  📥 Export JSON
+                </button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <span class="setting-name">Import Data Backup</span>
+                <span class="setting-desc">Restore your saved data from a previously exported JSON backup file.</span>
+              </div>
+              <div class="setting-control">
+                <label for="import-data-input" class="nav-btn" style="cursor: pointer;">
+                  📤 Import JSON
+                </label>
+                <input type="file" id="import-data-input" accept=".json" style="display:none;">
+              </div>
+            </div>
+
+            <div class="setting-row danger-row">
+              <div class="setting-info">
+                <span class="setting-name">Reset Application Data</span>
+                <span class="setting-desc">Clear all custom slang, bookmarks, and notifications and restore default settings.</span>
+              </div>
+              <div class="setting-control">
+                <button type="button" id="reset-data-btn" class="nav-btn danger">
+                  🗑️ Reset All Data
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Gen Z Quiz Mini-Game View -->
+    <section id="quiz-view" class="quiz-section" style="display: none;">
+      <div class="quiz-card">
+        <!-- Quiz Difficulty Selector -->
+        <div class="quiz-difficulty-bar">
+          <span class="diff-label">🎯 Difficulty:</span>
+          <button class="diff-pill active" data-difficulty="All">All Questions</button>
+          <button class="diff-pill" data-difficulty="Easy">Easy 🟢</button>
+          <button class="diff-pill" data-difficulty="Medium">Medium 🟡</button>
+          <button class="diff-pill" data-difficulty="Hard">Hard 🔴</button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="quiz-progress-wrap">
+          <div id="quiz-progress-bar" class="quiz-progress-bar"></div>
+        </div>
+
+        <!-- Active Quiz Question Screen -->
+        <div id="quiz-active-screen">
+          <div class="quiz-header">
+            <span id="quiz-question-number" class="quiz-question-number">Question 1 of 8</span>
+            <span id="quiz-score-badge" class="quiz-score-badge">Score: 0</span>
+          </div>
+
+          <h3 id="quiz-question-text" class="quiz-question-text">Loading question...</h3>
+
+          <div id="quiz-options-list" class="quiz-options-list">
+            <!-- Dynamic Multiple Choice Buttons -->
+          </div>
+
+          <div id="quiz-explanation-box" class="quiz-explanation-box"></div>
+
+          <div class="quiz-footer">
+            <button id="quiz-next-btn" class="nav-btn primary" style="display:none;">
+              Next Question ➡️
+            </button>
+          </div>
+        </div>
+
+        <!-- Quiz Completion Screen -->
+        <div id="quiz-result-view" class="quiz-result-view">
+          <div class="quiz-result-icon">🎉</div>
+          <h2 class="quiz-result-title">Quiz Completed!</h2>
+          <p id="quiz-result-score" class="quiz-result-score">You scored 8 out of 8 (100%)</p>
+          <div id="quiz-result-rank" class="quiz-result-rank">🏆 Certified Sigma</div>
+          <p id="quiz-result-feedback" class="quiz-result-feedback">
+            You know your slang inside and out!
+          </p>
+          <button id="quiz-restart-btn" class="nav-btn primary">
+            🔄 Retake Quiz
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Dialog: Add New Slang -->
+  <div id="add-slang-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title">✨ Add New Slang</h2>
+        <button id="close-add-modal-btn" class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="add-slang-form">
+        <div class="form-group">
+          <label class="form-label" for="modal-word">Slang Word / Phrase *</label>
+          <input type="text" id="modal-word" class="form-input" placeholder="e.g. Brainrot, Glazing" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-pronunciation">Pronunciation (Phonetic)</label>
+          <input type="text" id="modal-pronunciation" class="form-input" placeholder="e.g. /ˈbreɪn.rɑːt/">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="modal-category-select">Category *</label>
+            <select id="modal-category-select" class="form-select" required>
+              <!-- Rendered by JS from CATEGORIES -->
+            </select>
+          </div>
+
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label" for="modal-region-select">Region / Origin</label>
+            <select id="modal-region-select" class="form-select">
+              <option value="Global">🌐 Global</option>
+              <option value="USA">🇺🇸 USA</option>
+              <option value="UK">🇬🇧 UK</option>
+              <option value="India">🇮🇳 India</option>
+              <option value="Internet/Online">💻 Internet / Online</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-emoji">Emoji Icon</label>
+          <input type="text" id="modal-emoji" class="form-input" placeholder="e.g. 🧠, 💅, 💀" maxlength="4">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-meaning">Meaning / Definition *</label>
+          <textarea id="modal-meaning" class="form-textarea" placeholder="Explain what the slang means in plain English..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-example">Example Conversation / Sentence *</label>
+          <textarea id="modal-example" class="form-textarea" placeholder="Give an authentic sentence showing how to use it..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-tags">Tags (comma separated)</label>
+          <input type="text" id="modal-tags" class="form-input" placeholder="e.g. meme, tiktok, aesthetic">
+          <span class="form-help">Saved locally to your browser via LocalStorage.</span>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="cancel-add-btn" class="nav-btn">Cancel</button>
+          <button type="submit" class="nav-btn primary">Save Slang</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Dialog: Slang Details View -->
+  <div id="slang-details-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-container details-modal-container">
+      <div class="modal-header">
+        <div class="details-modal-header-meta">
+          <span id="detail-category-badge" class="card-category-badge badge-basics">Slang Basics</span>
+          <span id="detail-region-badge" class="region-badge-pill">🌍 Global</span>
+          <span id="detail-popularity-badge" class="popularity-pill">🔥 98% Popularity</span>
+        </div>
+        <button id="close-details-modal-btn" class="modal-close-btn" aria-label="Close details">✕</button>
+      </div>
+
+      <div class="details-modal-body">
+        <div class="detail-title-section">
+          <span id="detail-emoji" class="detail-emoji">😏</span>
+          <div>
+            <h2 id="detail-word" class="detail-word">Rizz</h2>
+            <div class="detail-pronunciation-row">
+              <span id="detail-pronunciation" class="detail-pronunciation">/rɪz/</span>
+              <button id="detail-speech-btn" class="speaker-btn" title="Pronounce word aloud">🔊</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Community Feedback Voting Bar in Details Modal -->
+        <div class="detail-feedback-row">
+          <span class="detail-feedback-label">Is this slang definition helpful?</span>
+          <div class="feedback-btn-group">
+            <button id="detail-vote-helpful-btn" class="feedback-vote-btn helpful-vote" title="Vote Helpful">
+              <span>👍 Helpful</span> (<span id="detail-helpful-count">0</span>)
+            </button>
+            <button id="detail-vote-unhelpful-btn" class="feedback-vote-btn unhelpful-vote" title="Vote Not Helpful">
+              <span>👎 Not Helpful</span> (<span id="detail-unhelpful-count">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h4 class="detail-section-title">📖 Meaning & Definition</h4>
+          <p id="detail-meaning" class="detail-text">Charisma or charm, specifically when flirting or trying to attract a romantic interest.</p>
+        </div>
+
+        <div class="detail-section">
+          <h4 class="detail-section-title">💬 Real-World Conversation Example</h4>
+          <div id="detail-example" class="detail-example-bubble">
+            “Bro walked up to her, made her laugh in 5 seconds, and got her number. Pure unspoken rizz.”
+          </div>
+        </div>
+
+        <div class="detail-section" id="detail-origin-container">
+          <h4 class="detail-section-title">🏛️ Origin, Lore & Cultural Context</h4>
+          <p id="detail-origin" class="detail-origin-text">Short for 'charisma'. Popularized by Twitch streamer Kai Cenat in 2021-2022.</p>
+        </div>
+
+        <div class="detail-section">
+          <h4 class="detail-section-title">🏷️ Related Hashtags & Topics</h4>
+          <div id="detail-tags-list" class="detail-tags-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="detail-meta-footer">
+          <span id="detail-author" class="detail-author-text">🛡️ Official Gen Z Dictionary Verified Entry</span>
+        </div>
+      </div>
+
+      <div class="modal-footer-actions">
+        <button id="detail-fav-btn" class="action-btn" title="Bookmark slang">
+          <span>★</span> <span id="detail-fav-label">Bookmark</span>
+        </button>
+        <button id="detail-copy-btn" class="action-btn" title="Copy slang meaning">
+          <span>📋</span> Copy Meaning
+        </button>
+        <button id="detail-share-btn" class="action-btn" title="Share slang">
+          <span>📤</span> Share
+        </button>
+        <button id="detail-close-bottom-btn" class="nav-btn primary" style="margin-left: auto;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Dialog: Edit Profile -->
+  <div id="edit-profile-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title">👤 Edit Your Profile</h2>
+        <button id="close-profile-modal-btn" class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="edit-profile-form">
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-name-input">Display Name *</label>
+          <input type="text" id="edit-profile-name-input" class="form-input" placeholder="e.g. Alex Rivers" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-handle-input">Username / Handle *</label>
+          <input type="text" id="edit-profile-handle-input" class="form-input" placeholder="e.g. @lingo_explorer" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-avatar-input">Avatar Emoji</label>
+          <input type="text" id="edit-profile-avatar-input" class="form-input" placeholder="e.g. 😎, 🚀, 🦊, ⚡" maxlength="4">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-bio-input">About Me / Bio</label>
+          <textarea id="edit-profile-bio-input" class="form-textarea" placeholder="Tell the community about your slang interest..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="cancel-profile-btn" class="nav-btn">Cancel</button>
+          <button type="submit" class="nav-btn primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p><strong>Gen Z Slang Dictionary & Lingo Explorer</strong></p>
+      <div class="footer-links">
+        <a href="#search-input" class="footer-link" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Back to Top</a>
+        <a href="#" class="footer-link" onclick="switchTab('dictionary'); return false;">Explore Slang</a>
+        <a href="#" class="footer-link" onclick="switchTab('favorites'); return false;">Bookmarks</a>
+        <a href="#" class="footer-link" onclick="switchTab('quiz'); return false;">Slang Quiz</a>
+        <a href="#" class="footer-link" onclick="switchTab('profile'); return false;">My Profile</a>
+        <a href="#" class="footer-link" onclick="switchTab('notifications'); return false;">Notifications</a>
+        <a href="#" class="footer-link" onclick="switchTab('settings'); return false;">Settings</a>
+      </div>
+      <span class="college-badge">🎓 Built for College Project & Demonstration • Zero Dependencies</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/data.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
