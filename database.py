@@ -7,9 +7,24 @@ full-text querying, analytics tracking, community feedback, and CRUD operations.
 import sqlite3
 import json
 import os
+import shutil
 from datetime import datetime
 
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'genz_dictionary.db')
+_SRC_DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'genz_dictionary.db')
+
+def _resolve_db_path():
+    """
+    On Vercel (and other read-only serverless environments) the deployment
+    directory is not writable.  Copy the pre-built DB to /tmp on first use.
+    """
+    if os.access(os.path.dirname(_SRC_DB) or '.', os.W_OK):
+        return _SRC_DB          # local dev -- use file in-place
+    tmp_db = '/tmp/genz_dictionary.db'
+    if not os.path.exists(tmp_db):
+        shutil.copy2(_SRC_DB, tmp_db)
+    return tmp_db
+
+DB_PATH = _resolve_db_path()
 
 def get_db_connection():
     """Establish connection to SQLite with row dictionary factory."""
